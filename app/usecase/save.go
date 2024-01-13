@@ -4,13 +4,13 @@ import (
 	entity "naive-feed-service/app/domain/entity"
 	domain "naive-feed-service/app/domain/repository"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 type SaveFeedItemInputDTO struct {
-	Id          string
-	ItemId      string
-	OrderNumber int
-	CreatedAt   time.Time
+	ItemId    string
+	CreatedAt time.Time
 }
 
 type SaveFeedItemUsecase struct {
@@ -23,11 +23,14 @@ func NewSaveFeedItemUsecase(feedRepository domain.FeedRepository) *SaveFeedItemU
 	}
 }
 
-func (u *SaveFeedItemUsecase) Run(inputDTO *SaveFeedItemInputDTO) {
+func (u *SaveFeedItemUsecase) Run(inputDTO *SaveFeedItemInputDTO) string {
+	id := uuid.New()
+	presentMinOrderNumber := u.feedRepository.GetMinItemNumber()
 	u.feedRepository.Save(&entity.FeedItem{
-		Id:          inputDTO.Id,
+		Id:          id.String(),
 		ItemId:      inputDTO.ItemId,
-		OrderNumber: inputDTO.OrderNumber,
+		OrderNumber: presentMinOrderNumber - 1,
 		CreatedAt:   inputDTO.CreatedAt,
 	})
+	return id.String()
 }
