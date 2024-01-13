@@ -19,10 +19,11 @@ func TestSaveFeedItemUsecase(t *testing.T) {
 		OrderNumber: -1,
 		CreatedAt:   time.Now(),
 	}
-	id := useCase.Run(&SaveFeedItemInputDTO{
+	id, err := useCase.Run(&SaveFeedItemInputDTO{
 		ItemId:    feed.ItemId,
 		CreatedAt: feed.CreatedAt,
 	})
+	assert.Equal(t, nil, err)
 	feed.Id = id
 	assert.Equal(t, feed, feedRepository.FeedTable[feed.Id])
 

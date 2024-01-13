@@ -5,7 +5,8 @@ import (
 )
 
 type FeedRepository interface {
-	Save(feed *entity.FeedItem)
+	Save(feed *entity.FeedItem) error
+	Update() error
 	GetAll() []*entity.FeedItem
-	GetMinItemNumber() int
+	GetMinItemNumber() (int, error)
 }
