@@ -36,7 +36,7 @@ func Run() {
 		})
 	})
 
-	engine.POST("/save", func(c *gin.Context) {
+	engine.POST("/feed", func(c *gin.Context) {
 		var requestData SaveFeedRequest
 
 		if err := c.ShouldBindJSON(&requestData); err != nil {
@@ -45,10 +45,14 @@ func Run() {
 		}
 		feedRepository := infrastructure.NewFeedRepository(db)
 		useCase := usecase.NewSaveFeedItemUsecase(feedRepository)
-		id := useCase.Run(&usecase.SaveFeedItemInputDTO{
+		id, err := useCase.Run(&usecase.SaveFeedItemInputDTO{
 			ItemId:    requestData.ItemId,
 			CreatedAt: time.Now(),
 		})
+		if err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
 		responseData := gin.H{"message": "Received POST request", "id": id}
 		c.JSON(200, responseData)
 
@@ -56,8 +60,21 @@ func Run() {
 
 	engine.GET("/feed", func(c *gin.Context) {
 		feedRepository := infrastructure.NewFeedRepository(db)
-		feedItems := feedRepository.GetAll()
+		useCase := usecase.NewGetFeedUsecase(feedRepository)
+		feedItems := useCase.Run()
 		c.JSON(200, feedItems)
+	})
+
+	engine.PUT("/feed", func(c *gin.Context) {
+		feedRepository := infrastructure.NewFeedRepository(db)
+		useCase := usecase.NewUpdateFeedUsecase(feedRepository)
+		err := useCase.Run()
+		if err != nil {
+			c.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+		responseData := gin.H{"message": "Received PUT request"}
+		c.JSON(200, responseData)
 	})
 	engine.Run(fmt.Sprint(config.Server.Address, ":", config.Server.Port))
 
