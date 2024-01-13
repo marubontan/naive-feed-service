@@ -51,3 +51,10 @@ func (r *FeedRepository) GetAll() []*entity.FeedItem {
 	return result
 
 }
+
+func (r *FeedRepository) GetMinItemNumber() int {
+	var minNumber int
+	// TODO: Error handling
+	r.db.Model(&FeedItem{}).Select("MIN(order_number)").Row().Scan(&minNumber)
+	return minNumber
+}

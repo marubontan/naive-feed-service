@@ -26,3 +26,13 @@ func (m *MockFeedRepository) GetAll() []*entity.FeedItem {
 	}
 	return result
 }
+
+func (m *MockFeedRepository) GetMinItemNumber() int {
+	minNumber := 0
+	for _, feed := range m.FeedTable {
+		if feed.OrderNumber < minNumber {
+			minNumber = feed.OrderNumber
+		}
+	}
+	return minNumber
+}
