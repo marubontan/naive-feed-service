@@ -1,0 +1,44 @@
+definitions:
+  server.SaveFeedRequest:
+    properties:
+      item_id:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Naive Feed Service
+paths:
+  /feed:
+    get:
+      description: get feed
+      responses:
+        "200":
+          description: OK
+      summary: Get feed
+    post:
+      description: Update feed
+      parameters:
+      - description: Item to add to feed
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/server.SaveFeedRequest'
+      responses:
+        "200":
+          description: OK
+      summary: Post feed item
+    put:
+      description: Update feed
+      responses:
+        "200":
+          description: OK
+      summary: Update feed
+  /health:
+    get:
+      description: Check health
+      responses:
+        "200":
+          description: OK
+      summary: Check health
+swagger: "2.0"
