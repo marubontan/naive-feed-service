@@ -5,7 +5,6 @@ Naive Feed Service is literally very naive feed service, which is without any de
 ## To run
 On the top directory
 ```bash
-go mod tidy
 go run app/cmd/main.go
 ```
 It needs postgres database setup in advance.
