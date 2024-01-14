@@ -16,15 +16,15 @@ func TestSaveFeedItemUsecase(t *testing.T) {
 	feed := &entity.FeedItem{
 		Id:          "test",
 		ItemId:      "test",
-		OrderNumber: 1,
+		OrderNumber: -1,
 		CreatedAt:   time.Now(),
 	}
-	useCase.Run(&SaveFeedItemInputDTO{
-		Id:          feed.Id,
-		ItemId:      feed.ItemId,
-		OrderNumber: feed.OrderNumber,
-		CreatedAt:   feed.CreatedAt,
+	id, err := useCase.Run(&SaveFeedItemInputDTO{
+		ItemId:    feed.ItemId,
+		CreatedAt: feed.CreatedAt,
 	})
+	assert.Equal(t, nil, err)
+	feed.Id = id
 	assert.Equal(t, feed, feedRepository.FeedTable[feed.Id])
 
 }

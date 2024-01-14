@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"math/rand"
 	"time"
 
 	entity "naive-feed-service/app/domain/entity"
@@ -26,14 +27,15 @@ func NewFeedRepository(db *gorm.DB) *FeedRepository {
 	}
 }
 
-func (r *FeedRepository) Save(feed *entity.FeedItem) {
+func (r *FeedRepository) Save(feed *entity.FeedItem) error {
 	feedItem := FeedItem{
 		Id:          feed.Id,
 		ItemId:      feed.ItemId,
 		OrderNumber: feed.OrderNumber,
 		CreatedAt:   feed.CreatedAt,
 	}
-	r.db.Create(&feedItem)
+	result := r.db.Create(&feedItem)
+	return result.Error
 }
 
 func (r *FeedRepository) GetAll() []*entity.FeedItem {
@@ -50,4 +52,36 @@ func (r *FeedRepository) GetAll() []*entity.FeedItem {
 	}
 	return result
 
+}
+
+func (r *FeedRepository) GetMinItemNumber() (int, error) {
+	var minNumber int
+	if err := r.db.Model(&FeedItem{}).Select("MIN(order_number)").Row().Scan(&minNumber); err != nil {
+		return -1, err
+
+	}
+	return minNumber, nil
+}
+
+func (r *FeedRepository) Update() error {
+	allFeedItems := r.GetAll()
+	feedItemsOrder := make([]int, len(allFeedItems))
+	for i := 0; i < len(allFeedItems); i++ {
+		feedItemsOrder[i] = i
+	}
+	shuffleArray(feedItemsOrder)
+
+	for i, feedItem := range allFeedItems {
+		feedItem.OrderNumber = feedItemsOrder[i]
+		r.db.Save(feedItem)
+	}
+	return nil
+}
+
+func shuffleArray(arr []int) {
+	n := len(arr)
+	for i := n - 1; i > 0; i-- {
+		j := rand.Intn(i + 1)
+		arr[i], arr[j] = arr[j], arr[i]
+	}
 }
