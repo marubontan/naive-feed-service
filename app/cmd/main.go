@@ -5,5 +5,6 @@ import (
 )
 
 func main() {
-	server.Run()
+	ginServer := server.NewServer()
+	ginServer.Run()
 }
