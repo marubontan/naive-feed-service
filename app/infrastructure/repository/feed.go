@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"errors"
 	"math/rand"
 	"time"
 
@@ -56,11 +57,16 @@ func (r *FeedRepository) GetAll() []*entity.FeedItem {
 
 func (r *FeedRepository) GetMinItemNumber() (int, error) {
 	var minNumber int
-	if err := r.db.Model(&FeedItem{}).Select("MIN(order_number)").Row().Scan(&minNumber); err != nil {
-		return -1, err
+	if err := r.db.Model(&FeedItem{}).Select("order_number").Order("order_number ASC").First(&minNumber).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return 0, nil
+		} else {
+			return -1, err
+		}
 
 	}
 	return minNumber, nil
+
 }
 
 func (r *FeedRepository) Update() error {
