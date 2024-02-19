@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"log/slog"
 	_ "naive-feed-service/app/cmd/docs"
 	"naive-feed-service/app/config"
 
@@ -32,11 +33,11 @@ type Server struct {
 func NewServer() *Server {
 	config, err := config.Load()
 	if err != nil {
-		util.Logger.Fatal(err)
+		util.Logger.Error("Failed to load config", slog.Any("err", err))
 	}
 	db, err := gorm.Open(postgres.Open(fmt.Sprintf("host=%s user=%s password=%s dbname=postgres port=%s sslmode=disable", config.Db.Host, config.Db.User, config.Db.Password, config.Db.Port)), &gorm.Config{})
 	if err != nil {
-		util.Logger.Fatal(err)
+		util.Logger.Error("Failed to connect to database", slog.Any("err", err))
 	}
 
 	return &Server{
@@ -112,7 +113,7 @@ func (s *Server) getFeedHandler(c *gin.Context) {
 
 // @title Naive Feed Service
 func (s *Server) Run() {
-	util.Logger.Println("Starting server...")
+	util.Logger.Info("Starting server...")
 	s.db.AutoMigrate(&infrastructure.FeedItem{})
 	s.engine.GET("/health", s.healthHandler)
 	s.engine.POST("/feed", s.postFeedItemHandler)
