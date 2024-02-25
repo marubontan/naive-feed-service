@@ -22,7 +22,7 @@ import (
 )
 
 type SaveFeedRequest struct {
-	ItemId string `json:"item_id"`
+	ItemId string `json:"item_id" binding:"required"`
 }
 
 type Server struct {
