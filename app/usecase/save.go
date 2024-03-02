@@ -1,8 +1,7 @@
 package usecase
 
 import (
-	entity "naive-feed-service/app/domain/entity"
-	domain "naive-feed-service/app/domain/repository"
+	"naive-feed-service/app/domain/feed"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,10 +13,10 @@ type SaveFeedItemInputDTO struct {
 }
 
 type SaveFeedItemUsecase struct {
-	feedRepository domain.FeedRepository
+	feedRepository feed.FeedRepository
 }
 
-func NewSaveFeedItemUsecase(feedRepository domain.FeedRepository) *SaveFeedItemUsecase {
+func NewSaveFeedItemUsecase(feedRepository feed.FeedRepository) *SaveFeedItemUsecase {
 	return &SaveFeedItemUsecase{
 		feedRepository: feedRepository,
 	}
@@ -29,7 +28,7 @@ func (u *SaveFeedItemUsecase) Run(inputDTO *SaveFeedItemInputDTO) (string, error
 	if err != nil {
 		return "", err
 	}
-	err = u.feedRepository.Save(&entity.FeedItem{
+	err = u.feedRepository.Save(&feed.FeedItem{
 		Id:          id.String(),
 		ItemId:      inputDTO.ItemId,
 		OrderNumber: presentMinOrderNumber - 1,

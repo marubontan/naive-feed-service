@@ -6,7 +6,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	domain "naive-feed-service/app/domain/repository"
+	"naive-feed-service/app/domain/feed"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -15,8 +15,8 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func setup(t *testing.T) (*Server, *domain.MockFeedRepository) {
-	feedRepository := domain.NewMockFeedRepository(gomock.NewController(t))
+func setup(t *testing.T) (*Server, *feed.MockFeedRepository) {
+	feedRepository := feed.NewMockFeedRepository(gomock.NewController(t))
 	repositories := Repositories{
 		FeedRepository: feedRepository,
 	}

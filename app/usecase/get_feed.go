@@ -1,21 +1,20 @@
 package usecase
 
 import (
-	entity "naive-feed-service/app/domain/entity"
-	domain "naive-feed-service/app/domain/repository"
+	"naive-feed-service/app/domain/feed"
 )
 
 type GetFeedUsecase struct {
-	feedRepository domain.FeedRepository
+	feedRepository feed.FeedRepository
 }
 
-func NewGetFeedUsecase(feedRepository domain.FeedRepository) *GetFeedUsecase {
+func NewGetFeedUsecase(feedRepository feed.FeedRepository) *GetFeedUsecase {
 	return &GetFeedUsecase{
 		feedRepository: feedRepository,
 	}
 }
 
-func (u *GetFeedUsecase) Run() []*entity.FeedItem {
+func (u *GetFeedUsecase) Run() []*feed.FeedItem {
 	feed := u.feedRepository.GetAll()
 	return feed
 }

@@ -1,12 +1,12 @@
 package usecase
 
-import domain "naive-feed-service/app/domain/repository"
+import "naive-feed-service/app/domain/feed"
 
 type UpdateFeedUsecase struct {
-	feedRepository domain.FeedRepository
+	feedRepository feed.FeedRepository
 }
 
-func NewUpdateFeedUsecase(feedRepository domain.FeedRepository) *UpdateFeedUsecase {
+func NewUpdateFeedUsecase(feedRepository feed.FeedRepository) *UpdateFeedUsecase {
 	return &UpdateFeedUsecase{
 		feedRepository: feedRepository,
 	}

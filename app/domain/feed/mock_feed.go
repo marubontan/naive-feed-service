@@ -1,28 +1,27 @@
-package domain
+package feed
 
 import (
 	"math/rand"
-	entity "naive-feed-service/app/domain/entity"
 
 	"go.uber.org/mock/gomock"
 )
 
 type MockFeedRepository struct {
 	*gomock.Controller
-	FeedTable map[string]*entity.FeedItem
+	FeedTable map[string]*FeedItem
 }
 
 func NewMockFeedRepository(ctrl *gomock.Controller) *MockFeedRepository {
-	return &MockFeedRepository{ctrl, make(map[string]*entity.FeedItem)}
+	return &MockFeedRepository{ctrl, make(map[string]*FeedItem)}
 }
 
-func (m *MockFeedRepository) Save(feed *entity.FeedItem) error {
+func (m *MockFeedRepository) Save(feed *FeedItem) error {
 	m.FeedTable[feed.Id] = feed
 	return nil
 }
 
-func (m *MockFeedRepository) GetAll() []*entity.FeedItem {
-	var result []*entity.FeedItem
+func (m *MockFeedRepository) GetAll() []*FeedItem {
+	var result []*FeedItem
 	for _, feed := range m.FeedTable {
 		result = append(result, feed)
 	}
