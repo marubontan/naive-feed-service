@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	domain "naive-feed-service/app/domain/repository"
+	"naive-feed-service/app/domain/feed"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -9,8 +9,8 @@ import (
 )
 
 func TestUpdateFeedUsecase(t *testing.T) {
-	feedRepository := domain.NewMockFeedRepository(gomock.NewController(t))
-	useCase := NewUpdateFeedUsecase(feedRepository)
-	err := useCase.Run()
+	feedRepository := feed.NewMockFeedRepository(gomock.NewController(t))
+	uc := NewUpdateFeedUsecase(feedRepository)
+	err := uc.Run()
 	assert.Equal(t, err, nil)
 }

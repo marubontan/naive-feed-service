@@ -1,12 +1,12 @@
 package util
 
 import (
-	"log"
+	"log/slog"
 	"os"
 )
 
-var Logger *log.Logger
+var Logger *slog.Logger
 
 func init() {
-	Logger = log.New(os.Stdout, "", log.LstdFlags|log.Lshortfile)
+	Logger = slog.New(slog.NewTextHandler(os.Stderr, nil))
 }
