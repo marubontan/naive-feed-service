@@ -2,7 +2,7 @@ run:
 	go run app/cmd/main.go
 test:
 	go test -count=1 ./...
-test-e2e:
+test-integration:
 	go test -tags=integration -count=1 ./...
 
 gen-swagger:

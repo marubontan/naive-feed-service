@@ -1,8 +1,7 @@
 package usecase
 
 import (
-	entity "naive-feed-service/app/domain/entity"
-	domain "naive-feed-service/app/domain/repository"
+	"naive-feed-service/app/domain/feed"
 	"testing"
 	"time"
 
@@ -11,15 +10,15 @@ import (
 )
 
 func TestSaveFeedItemUsecase(t *testing.T) {
-	feedRepository := domain.NewMockFeedRepository(gomock.NewController(t))
-	useCase := NewSaveFeedItemUsecase(feedRepository)
-	feed := &entity.FeedItem{
+	feedRepository := feed.NewMockFeedRepository(gomock.NewController(t))
+	uc := NewSaveFeedItemUsecase(feedRepository)
+	feed := &feed.FeedItem{
 		Id:          "test",
 		ItemId:      "test",
 		OrderNumber: -1,
 		CreatedAt:   time.Now(),
 	}
-	id, err := useCase.Run(&SaveFeedItemInputDTO{
+	id, err := uc.Run(&SaveFeedItemInputDTO{
 		ItemId:    feed.ItemId,
 		CreatedAt: feed.CreatedAt,
 	})

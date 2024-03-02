@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	entity "naive-feed-service/app/domain/entity"
+	"naive-feed-service/app/domain/feed"
 
 	"gorm.io/gorm"
 )
@@ -28,7 +28,7 @@ func NewFeedRepository(db *gorm.DB) *FeedRepository {
 	}
 }
 
-func (r *FeedRepository) Save(feed *entity.FeedItem) error {
+func (r *FeedRepository) Save(feed *feed.FeedItem) error {
 	feedItem := FeedItem{
 		Id:          feed.Id,
 		ItemId:      feed.ItemId,
@@ -39,12 +39,12 @@ func (r *FeedRepository) Save(feed *entity.FeedItem) error {
 	return result.Error
 }
 
-func (r *FeedRepository) GetAll() []*entity.FeedItem {
+func (r *FeedRepository) GetAll() []*feed.FeedItem {
 	var feedItems []FeedItem
 	r.db.Find(&feedItems)
-	var result []*entity.FeedItem
+	var result []*feed.FeedItem
 	for _, feedItem := range feedItems {
-		result = append(result, &entity.FeedItem{
+		result = append(result, &feed.FeedItem{
 			Id:          feedItem.Id,
 			ItemId:      feedItem.ItemId,
 			OrderNumber: feedItem.OrderNumber,

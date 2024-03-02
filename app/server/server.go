@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	_ "naive-feed-service/app/cmd/docs"
 	"naive-feed-service/app/config"
-	domain "naive-feed-service/app/domain/repository"
+	"naive-feed-service/app/domain/feed"
 	infrastructure "naive-feed-service/app/infrastructure/repository"
 
 	swaggerFiles "github.com/swaggo/files"
@@ -25,7 +25,7 @@ type SaveFeedRequest struct {
 }
 
 type Repositories struct {
-	FeedRepository domain.FeedRepository
+	FeedRepository feed.FeedRepository
 }
 
 func NewRepositories(db *gorm.DB) Repositories {
