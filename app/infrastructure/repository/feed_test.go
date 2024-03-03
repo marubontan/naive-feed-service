@@ -12,6 +12,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/go-playground/assert/v2"
 	_ "github.com/lib/pq"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
@@ -94,5 +95,9 @@ func TestRepositorySave(t *testing.T) {
 		CreatedAt:   time.Now(),
 	}
 	r.Save(feed)
-
+	var savedFeedItem FeedItem
+	mockDb.First(&savedFeedItem, "id=?", feed.Id)
+	assert.Equal(t, feed.Id, savedFeedItem.Id)
+	assert.Equal(t, feed.ItemId, savedFeedItem.ItemId)
+	assert.Equal(t, feed.OrderNumber, savedFeedItem.OrderNumber)
 }
