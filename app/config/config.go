@@ -1,6 +1,8 @@
 package config
 
 import (
+	"sync"
+
 	"github.com/kelseyhightower/envconfig"
 )
 
@@ -22,9 +24,14 @@ type Db struct {
 }
 
 var config Config
+var once sync.Once
 
-func Load() (*Config, error) {
-	err := envconfig.Process("", &config)
+func New() (*Config, error) {
+	var err error
+	once.Do(func() {
+		err = envconfig.Process("", &config)
+
+	})
 	if err != nil {
 		return nil, err
 	}

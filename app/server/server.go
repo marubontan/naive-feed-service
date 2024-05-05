@@ -7,6 +7,7 @@ import (
 	"naive-feed-service/app/config"
 	"naive-feed-service/app/domain/feed"
 	infrastructure "naive-feed-service/app/infrastructure/repository"
+	"sync"
 
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -28,18 +29,24 @@ type Repositories struct {
 	FeedRepository feed.FeedRepository
 }
 
-func NewRepositories(db *gorm.DB) Repositories {
-	return Repositories{
-		FeedRepository: infrastructure.NewFeedRepository(db),
-	}
+var once sync.Once
+
+func NewRepositories(db *gorm.DB) *Repositories {
+	var repositories *Repositories
+	once.Do(func() {
+		repositories = &Repositories{
+			FeedRepository: infrastructure.NewFeedRepository(db),
+		}
+	})
+	return repositories
 }
 
 type Server struct {
 	engine       *gin.Engine
-	repositories Repositories
+	repositories *Repositories
 }
 
-func NewServer(repositories Repositories) *Server {
+func NewServer(repositories *Repositories) *Server {
 	return &Server{
 		engine:       gin.Default(),
 		repositories: repositories,

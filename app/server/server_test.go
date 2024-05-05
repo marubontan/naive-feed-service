@@ -20,7 +20,7 @@ func setup(t *testing.T) (*Server, *feed.MockFeedRepository) {
 	repositories := Repositories{
 		FeedRepository: feedRepository,
 	}
-	ginServer := NewServer(repositories)
+	ginServer := NewServer(&repositories)
 	ginServer.Setup()
 	return ginServer, feedRepository
 

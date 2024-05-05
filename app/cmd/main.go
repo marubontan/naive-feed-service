@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	config, err := config.Load()
+	config, err := config.New()
 	if err != nil {
 		util.Logger.Error("Failed to load config", slog.Any("err", err))
 		os.Exit(1)
