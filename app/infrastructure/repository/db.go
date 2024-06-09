@@ -13,9 +13,9 @@ import (
 )
 
 var once sync.Once
+var db *gorm.DB
 
 func NewDb(dbConfig *config.Db) *gorm.DB {
-	var db *gorm.DB
 	var err error
 
 	once.Do(func() {
